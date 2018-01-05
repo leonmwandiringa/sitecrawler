@@ -48,15 +48,30 @@
     <!-- Page Content -->
     <div class="container">
       <div class="row">
-        <div class="col-lg-10 col-md-10 col-md-push-1 center-block" style="margin: 100px;">
+        <div class="col-lg-12 col-md-12 col-md-push-1 center-block" style="margin: 100px;">
           {# <h1 class="mt-5"></h1> #}
+          <div class="alert alert-dismissible alert-successs" id="status"></div>
         <form name="excelupload" enctype="multipart/form-data" method="post" id="excelupt">
+          <div class="col-md-2" style="float: left;">
           <div class="form-group">
+              <input type="text" name="localeval" class="form-control" placeholder="locale">
+          </div></div>
+          <div class="col-md-4" style="float: left;">
+          <div class="form-group">
+              <input type="text" name="regexptarget" class="form-control" placeholder="reg exp url target">
+          </div>
+          </div>
+          <div class="col-md-4" style="float: left;">
+          <div class="form-group">
+              <input type="text" name="regexpreplace" class="form-control" placeholder="reg exp url replacement">
+          </div>
+        </div>
+          <div class="form-group" style="margin-left: 20%;">
+            
             <div class="input-group">
-              <div class="alert alert-dismissible alert-successs" id="status"></div>
-            <span class="input-group-addon"><i class="glyphicon glyphicon-email"></i></span>
-              <input type="file" name="fileupload" id="excelfile" style="border: 2px solid grey; padding: 10px;">
-              <span class="input-group-btn"><button id="submit" class="btn btn-primary btn-lg">Run check</button></span>
+              
+              <input type="file" name="fileupload" id="excelfile" style="border: 2px solid #007bff; padding: 10px;">
+              <span class="input-group-btn"><button id="submit" class="btn btn-primary btn-lg" style="padding: 12px !important; border-radius: 0px !important;">Run check</button></span>
             </div>
           </div>
         </form>
@@ -96,21 +111,30 @@
         $("#checkkk").click(function(){
           
                     var tablehtml = $("#dtable").html();
-                    //console.log("dgfs");
-                    var hthr = new XMLHttpRequest();
-                    hthr.open("POST", "/urlcrawler/converttoexcel", true);
-                    hthr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-
-                    hthr.onload = function(){
-                      if(this.status == 200){
-                        return this.responseText;
-                        console.log(this.responseText);
-                      }
-                    }
-
-                    hthr.send("html="+tablehtml);
+                    //console.log(tablehtml);
+                    exportHtml(tablehtml);
           
-                  });
+          });
+
+          function exportHtml(tablehtml){
+
+            var hthr = new XMLHttpRequest();
+            hthr.open("POST", "/urlcrawler/converttoexcel", true);
+            hthr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            hthr.onerror =  function(){
+              console.log("error");
+
+            }
+            hthr.onload = function(){
+              if(this.status == 200){
+                //return this.responseText;
+                console.log(this.responseText);
+                
+              }
+            }
+
+            hthr.send("htmltb="+tablehtml);
+          }
         $("#excelupt").submit(function(e){
           e.preventDefault();
 

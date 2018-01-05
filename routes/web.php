@@ -23,19 +23,20 @@
 
     $app->post("/converttoexcel", function($request, $response){
 
-        $htmltable = $request->getParsedBodyParam("html");
+        $htmltable = $request->getParsedBodyParam("htmltb");
+        //return $htmltable;
 
         $excelobj = new PHPExcel();
         $excelobj->getActiveSheet($htmltable);
+        $response->withHeader("Content-Type","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")->withHeader('Content-Disposition','attachment;filename="crawloutput.xlsx"')->withHeader("Cache-Control","max-age=0");
+        //   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        //   header('Content-Disposition: attachment;filename="crawloutput.xlsx"');
+        //   header('Cache-Control: max-age=0');
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="crawloutput.xlsx"');
-        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($excelobj, 'Excel2007');
+        return $objWriter->save('php://output');
 
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save('php://output');
-
-        return $objWriter;
+        //return $objWriter;
 
     });
 
