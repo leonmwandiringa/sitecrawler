@@ -13,7 +13,7 @@
     <!-- Bootstrap core CSS -->
     <link href="{{base_url()}}/public/css/bootstrap.min.css" rel="stylesheet">
     <script src="{{base_url()}}/public/js/jquery.min.js"></script>
-    <script src="{{base_url()}}/public/js/bootstrap.bundle.min.js"></script>
+    
 
     <!-- Custom styles for this template -->
     <style>
@@ -54,16 +54,16 @@
         <form name="excelupload" enctype="multipart/form-data" method="post" id="excelupt">
           <div class="col-md-2" style="float: left;">
           <div class="form-group">
-              <input type="text" name="localeval" class="form-control" placeholder="locale">
+              <input type="text" name="localeval" class="form-control" placeholder="locale" id="localeval" required>
           </div></div>
           <div class="col-md-4" style="float: left;">
           <div class="form-group">
-              <input type="text" name="regexptarget" class="form-control" placeholder="reg exp url target">
+              <input type="text" name="regexptarget" class="form-control" placeholder="reg exp url target" id="regexptarget">
           </div>
           </div>
           <div class="col-md-4" style="float: left;">
           <div class="form-group">
-              <input type="text" name="regexpreplace" class="form-control" placeholder="reg exp url replacement">
+              <input type="text" name="regexpreplace" class="form-control" placeholder="reg exp url replacement" id="regexpreplace">
           </div>
         </div>
           <div class="form-group" style="margin-left: 20%;">
@@ -94,7 +94,7 @@
 
       $(document).ready(function(){
 
-        var form, fileSelect, uploadButton, statusDiv, responseobj, tablei, statusc, maray = [];
+        var form, fileSelect, uploadButton, statusDiv, responseobj, tablei, statusc, maray = [], chosenlocale, urltarget, urlreplace;
 
 
 
@@ -137,7 +137,11 @@
           }
         $("#excelupt").submit(function(e){
           e.preventDefault();
-
+          //.length != 0 || $("#localeval").val() != null ? $("#localeval").val() : "EN-US"
+          chosenlocale = $("#localeval").val();
+          urltarget = $("#regexptarget").val() != "" || $("#regexptarget").val() != null ? $("#regexptarget").val() : "";
+          urlreplace = $("#regexpreplace").val() != "" || $("#regexpreplace").val() != null ? $("#regexpreplace").val() : "";
+          //console.log(chosenlocale);
           form = document.getElementById('excelupt');
           fileSelect = document.getElementById('excelfile');
           uploadButton = document.getElementById('submit');
@@ -194,7 +198,7 @@
                //checkResponse(itemval);
 
                var urlcorrect = itemval.replace("/Sites/www.","https://www.");
-               var finalUrl = urlcorrect.replace("/Global/", "/EN-HK/").replace(".xboxwww.",".xbox.");
+               var finalUrl = urlcorrect.replace("/Global/", "/"+chosenlocale+"/").replace(".xboxwww.",".xbox.");
                //console.log(finalUrl);
      
      
@@ -231,9 +235,10 @@
           tablei += '<tr><td>Url</td><td>Published By</td><td>Last Saved By</td><td>Published Time</td></td><td>End Published Time</td><td>Page Response</td></tr>';
 
             for(var i in responseobj){
-
+              
+              //"/EN-HK/"
               tablei += '<tr>';
-              tablei += '<td>'+responseobj[i][0].replace("/Sites/www.","https://www.").replace("/Global/", "/EN-HK/").replace(".xboxwww.",".xbox.")+'</td>';
+              tablei += '<td>'+responseobj[i][0].replace("/Sites/www.","https://www.").replace("/Global/", "/"+chosenlocale+"/").replace(".xboxwww.",".xbox.")+'</td>';
               tablei += '<td>'+responseobj[i][2]+'</td>';
               tablei += '<td>'+responseobj[i][6]+'</td>';
               tablei += '<td>'+responseobj[i][4]+'</td>';
