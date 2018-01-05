@@ -70,7 +70,7 @@
             
             <div class="input-group">
               
-              <input type="file" name="fileupload" id="excelfile" style="border: 2px solid #007bff; padding: 10px;">
+              <input type="file" name="fileupload" id="excelfile" style="border: 2px solid #007bff; padding: 10px;" required>
               <span class="input-group-btn"><button id="submit" class="btn btn-primary btn-lg" style="padding: 12px !important; border-radius: 0px !important;">Run check</button></span>
             </div>
           </div>
@@ -142,6 +142,7 @@
           urltarget = $("#regexptarget").val() != "" || $("#regexptarget").val() != null ? $("#regexptarget").val() : "";
           urlreplace = $("#regexpreplace").val() != "" || $("#regexpreplace").val() != null ? $("#regexpreplace").val() : "";
           //console.log(chosenlocale);
+          console.log(typeof $("#regexptarget").val());
           form = document.getElementById('excelupt');
           fileSelect = document.getElementById('excelfile');
           uploadButton = document.getElementById('submit');
